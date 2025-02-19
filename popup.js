@@ -5,8 +5,6 @@ const DEFAULT_CONFIG = {
     apiPath: '/v1/chat/completions',
     modelName: 'deepseek-chat',
     temperature: 0.7,
-    enableAISummary: true,
-    showSummaryButton: true,
     systemPrompt: `作为文本总结助手，请将用户输入的文本进行总结。要求：
 1. 总结文章内容，对于文章的提到的解答，进行完善
 2. 使用简体中文，保持专业术语
@@ -25,8 +23,6 @@ async function loadConfig() {
     document.getElementById('modelName').value = config.modelName;
     document.getElementById('temperature').value = config.temperature;
     document.getElementById('temperatureValue').textContent = config.temperature;
-    document.getElementById('enableAISummary').checked = config.enableAISummary;
-    document.getElementById('showSummaryButton').checked = config.showSummaryButton;
     document.getElementById('systemPrompt').value = config.systemPrompt;
 }
 
@@ -38,8 +34,6 @@ async function saveConfig() {
         apiPath: document.getElementById('apiPath').value,
         modelName: document.getElementById('modelName').value,
         temperature: parseFloat(document.getElementById('temperature').value),
-        enableAISummary: document.getElementById('enableAISummary').checked,
-        showSummaryButton: document.getElementById('showSummaryButton').checked,
         systemPrompt: document.getElementById('systemPrompt').value
     };
     await chrome.storage.sync.set(config);
@@ -56,10 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     ['apiKey', 'apiEndpoint', 'apiPath', 'modelName'].forEach(id => {
-        document.getElementById(id).addEventListener('change', saveConfig);
-    });
-
-    ['enableAISummary', 'showSummaryButton'].forEach(id => {
         document.getElementById(id).addEventListener('change', saveConfig);
     });
 
