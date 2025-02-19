@@ -2,47 +2,24 @@
 
 一个 Chrome 浏览器扩展，可以使用 AI 快速总结选中的文本内容。通过选中网页上的文本，一键生成核心内容总结。
 
-## 主要功能
+## 功能特点
 
-1. 快速总结选中文本
+1. 右键菜单快速调用
 2. 自定义 AI 提示词
 3. 可配置 API 参数
 4. 支持调整 AI 响应温度
 5. Markdown 格式输出结果
-
-## 快速开始
-
-### 安装依赖
-```bash
-npm install
-```
-
-### 开发模式
-```bash
-npm run dev
-```
-
-### 构建打包
-```bash
-npm run build
-```
-
-### 安装到浏览器
-1. 打开 Chrome 浏览器，访问 `chrome://extensions/`
-2. 开启右上角的"开发者模式"
-3. 点击"加载已解压的扩展程序"
-4. 选择项目的 `dist` 目录
+6. 界面简洁直观
 
 ## 使用方法
 
+### 基础使用
 1. 在网页中选中要总结的文本
-2. 点击扩展图标
-3. 点击"总结选中内容"按钮
-4. 等待 AI 生成总结结果
+2. 右键选择 "AI 总结选中内容"
+3. 等待 AI 生成总结结果
 
-## 配置选项
-
-### 基础配置
+### 配置选项
+点击扩展图标，可以展开配置面板：
 - API 密钥：用于访问 AI 服务
 - API 端点：默认为 `https://api.uniapi.io`
 - API 路径：默认为 `/v1/chat/completions`
@@ -50,7 +27,7 @@ npm run build
 - 温度参数：可调范围 0-1，默认 0.7
 
 ### 提示词配置
-可以自定义 AI 总结的提示词模板：
+可以自定义 AI 总结的提示词模板，默认配置为：
 ```
 作为文本总结助手，请将用户输入的文本进行总结。要求：
 1. 总结文章内容，对于文章的提到的解答，进行完善
@@ -61,22 +38,25 @@ npm run build
 6. 按重要性排序
 ```
 
+## 安装方法
+
+1. 下载源代码
+2. 打开 Chrome 浏览器，访问 `chrome://extensions/`
+3. 开启右上角的"开发者模式"
+4. 点击"加载已解压的扩展程序"
+5. 选择项目文件夹
+
 ## 项目结构
 
 ```
 .
-├── src/                # 源代码目录
-│   ├── manifest.json   # 扩展配置文件
-│   ├── popup/         # 弹出窗口相关
-│   │   ├── popup.html # 弹出窗口界面
-│   │   └── popup.js   # 弹出窗口逻辑
-│   ├── background.js  # 后台服务脚本
-│   ├── content.js     # 内容脚本
-│   └── icons/         # 图标文件
-│       └── icon.png   # 扩展图标
-├── dist/              # 构建输出目录
-├── package.json       # 项目配置文件
-└── README.md         # 项目说明文档
+├── manifest.json      # 扩展配置文件
+├── popup.html        # 弹出窗口界面
+├── popup.js          # 弹出窗口逻辑
+├── background.js     # 后台服务脚本
+├── content.js        # 内容脚本
+└── icons/            # 图标文件
+    └── icon.svg      # 扩展图标
 ```
 
 ## 技术实现
@@ -93,15 +73,8 @@ npm run build
 ### background.js
 - 处理 API 请求
 - 管理系统提示词
+- 处理右键菜单功能
 - 处理错误和异常情况
-
-## 开发调试
-
-1. 运行开发模式 `npm run dev`
-2. 在扩展管理页面加载 `dist` 目录
-3. 右键扩展图标，选择"审查弹出内容"
-4. 在 Console 面板查看日志输出
-5. 使用 Network 面板监控 API 请求
 
 ## 注意事项
 
@@ -117,24 +90,14 @@ npm run build
 - [x] 可配置的 API 参数
 - [x] 自定义提示词支持
 - [x] 温度参数调节
+- [x] 右键菜单快速调用
+- [x] 界面折叠优化
 
 ### 待实现功能
-- [ ] npm 构建支持
-- [ ] 开发模式热重载
 - [ ] 历史记录保存
 - [ ] 快捷键支持
 - [ ] 更多的输出格式选项
 - [ ] 批量处理功能
-
-## 贡献指南
-
-欢迎提交 Issue 和 Pull Request 来帮助改进项目。
-
-1. Fork 项目
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 打开 Pull Request
 
 ## License
 

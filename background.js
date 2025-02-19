@@ -35,18 +35,11 @@ async function getConfig() {
 async function summarizeContent(content) {
     try {
         const config = await getConfig();
-        console.log('content:', content);
         
         // 检查 API 密钥是否存在
         if (!config.apiKey) {
             throw new Error('请先配置 API 密钥');
         }
-
-        console.log('Sending request to:', `${config.apiEndpoint}${config.apiPath}`);
-        console.log('Using config:', {
-            model: config.modelName,
-            temperature: config.temperature
-        });
 
         const response = await fetch(`${config.apiEndpoint}${config.apiPath}`, {
             method: 'POST',
@@ -72,12 +65,10 @@ async function summarizeContent(content) {
 
         if (!response.ok) {
             const errorData = await response.text();
-            console.error('API response error:', response.status, errorData);
             throw new Error(`API 请求失败: ${response.status} ${errorData}`);
         }
 
         const data = await response.json();
-        console.log('API response:', data);
 
         if (!data.choices || !data.choices[0] || !data.choices[0].message) {
             throw new Error('API 返回数据格式错误');
@@ -94,7 +85,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'summarize') {
         summarizeContent(request.content)
             .then(summary => {
-                console.log('Sending summary back to popup');
                 sendResponse({summary});
             })
             .catch(error => {
