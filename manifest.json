@@ -13,10 +13,6 @@
   "host_permissions": [
     "<all_urls>"
   ],
-  "web_accessible_resources": [{
-    "resources": ["popup.html"],
-    "matches": ["<all_urls>"]
-  }],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {

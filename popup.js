@@ -75,6 +75,52 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 添加提示词变化监听
     document.getElementById('systemPrompt').addEventListener('change', saveConfig);
 
+    // 添加拖拽功能
+    const dragHandle = document.querySelector('.drag-handle');
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    
+    dragHandle.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      initialX = e.clientX;
+      initialY = e.clientY;
+      
+      chrome.windows.getCurrent(window => {
+        currentX = window.left;
+        currentY = window.top;
+      });
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        const deltaX = e.clientX - initialX;
+        const deltaY = e.clientY - initialY;
+        
+        chrome.windows.getCurrent(window => {
+          chrome.windows.update(window.id, {
+            left: currentX + deltaX,
+            top: currentY + deltaY
+          });
+        });
+      }
+    });
+    
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    // 添加折叠功能
+    document.querySelectorAll('.collapsible').forEach(button => {
+        button.addEventListener('click', function() {
+            this.classList.toggle('collapsed');
+            const content = this.nextElementSibling;
+            content.classList.toggle('expanded');
+        });
+    });
+
     // 总结按钮点击事件
     document.getElementById('summarize').addEventListener('click', async () => {
         const summaryDiv = document.getElementById('summary');

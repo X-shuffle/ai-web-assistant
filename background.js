@@ -10,7 +10,7 @@ chrome.runtime.onInstalled.addListener(() => {
 // 监听右键菜单点击事件
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === "summarizeSelection") {
-    // 使用 action.openPopup 打开扩展弹窗
+    // 使用 popup 方式打开
     chrome.action.openPopup();
   }
 });

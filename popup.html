@@ -3,31 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <style>
+        .drag-handle {
+            background: #f0f0f0;
+            padding: 8px;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .drag-handle h2 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+        
         body {
-            width: 400px;
-            padding: 10px;
+            width: 500px;
+            padding: 0;
+            margin: 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .content-area {
+            padding: 15px;
+            max-height: 600px;
+            overflow-y: auto;
         }
         #summary {
             white-space: pre-wrap;
             margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
         }
         .loading {
             color: #666;
             font-style: italic;
+            padding: 10px;
+            text-align: center;
         }
         .config-section {
             margin-bottom: 15px;
-            padding: 10px;
+            padding: 0;
             border: 1px solid #ddd;
             border-radius: 4px;
+            background: #fff;
         }
         .config-item {
             margin-bottom: 8px;
         }
         .config-item input[type="text"] {
             width: 100%;
-            padding: 4px;
+            padding: 8px;
             margin-top: 4px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
         }
         .config-item label {
             display: block;
@@ -80,44 +116,112 @@
         input:checked + .slider:before {
             transform: translateX(26px);
         }
+        #systemPrompt {
+            font-family: monospace;
+            line-height: 1.4;
+            resize: vertical;
+        }
+        button#summarize {
+            width: 100%;
+            padding: 10px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        button#summarize:hover {
+            background: #1976D2;
+        }
+        h3 {
+            margin-top: 0;
+            color: #333;
+            font-size: 16px;
+        }
+        .collapsible {
+            cursor: pointer;
+            padding: 5px 10px;
+            background: #f8f9fa;
+            border: none;
+            text-align: left;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+        }
+        .collapsible:after {
+            content: '▼';
+            font-size: 12px;
+        }
+        .collapsible.collapsed:after {
+            content: '▶';
+        }
+        .config-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+        }
+        .config-content.expanded {
+            max-height: 500px;
+        }
+        .config-section-content {
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
-    <div class="config-section">
-        <h3>配置信息</h3>
-        <div class="config-item">
-            <input type="text" id="apiKey"  placeholder="输入API密钥">
-        </div>
-        <div class="config-item">
-            <input type="text" id="apiEndpoint" value="https://api.uniapi.io" placeholder="API端点">
-            <input type="text" id="apiPath" value="/v1/chat/completions" placeholder="API路径">
-            <input type="text" id="modelName" value="gpt-4o-mini" placeholder="模型名称">
-        </div>
-        <div class="config-item">
-            <div class="temperature-control">
-                <span>温度:</span>
-                <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.7">
-                <span id="temperatureValue">0.7</span>
+    <div class="drag-handle">
+        <h2>AI 文本总结助手</h2>
+    </div>
+    <div class="content-area">
+        <div class="config-section">
+            <button class="collapsible collapsed">配置信息</button>
+            <div class="config-content">
+            <div class="config-section-content">
+            <div class="config-item">
+                <input type="text" id="apiKey"  placeholder="输入API密钥">
+            </div>
+            <div class="config-item">
+                <input type="text" id="apiEndpoint" value="https://api.uniapi.io" placeholder="API端点">
+                <input type="text" id="apiPath" value="/v1/chat/completions" placeholder="API路径">
+                <input type="text" id="modelName" value="gpt-4o-mini" placeholder="模型名称">
+            </div>
+            <div class="config-item">
+                <div class="temperature-control">
+                    <span>温度:</span>
+                    <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.7">
+                    <span id="temperatureValue">0.7</span>
+                </div>
+            </div>
+            </div>
             </div>
         </div>
-    </div>
 
-    <div class="config-section">
-        <h3>提示词配置</h3>
-        <div class="config-item">
-            <label for="systemPrompt">系统提示词：</label>
-            <textarea id="systemPrompt" rows="8" style="width: 100%; margin-top: 4px; padding: 8px;">作为文本总结助手，请将用户输入的文本进行总结。要求：
+        <div class="config-section">
+            <button class="collapsible collapsed">提示词配置</button>
+            <div class="config-content">
+            <div class="config-section-content">
+            <div class="config-item">
+                <label for="systemPrompt">系统提示词：</label>
+                <textarea id="systemPrompt" rows="8" style="width: 100%; margin-top: 4px; padding: 8px;">作为文本总结助手，请将用户输入的文本进行总结。要求：
 1. 只关注问题本身，不提供解决方案
 2. 使用简体中文，保持专业术语
 3. 输出格式为 markdown 列表
 4. 相关内容合并为一点
 5. 删除重复信息
 6. 按重要性排序</textarea>
+            </div>
+            </div>
+            </div>
         </div>
-    </div>
 
-    <button id="summarize">AI 总结选中内容</button>
-    <div id="summary"></div>
-    <script src="popup.js"></script>
+        <button id="summarize">AI 总结选中内容</button>
+        <div id="summary"></div>
+        <script src="popup.js"></script>
+    </div>
 </body>
 </html> 
