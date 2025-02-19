@@ -1,3 +1,20 @@
+// 在文件开头添加右键菜单初始化代码
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.contextMenus.create({
+    id: "summarizeSelection",
+    title: "AI 总结选中内容",
+    contexts: ["selection"]
+  });
+});
+
+// 监听右键菜单点击事件
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === "summarizeSelection") {
+    // 使用 action.openPopup 打开扩展弹窗
+    chrome.action.openPopup();
+  }
+});
+
 async function getConfig() {
     return await chrome.storage.sync.get({
         apiKey: 'sk-vmxSDuixD4FRyKi_Eg1a1blINMcyReRySf3EXZGvEJ1HWCvRuQ5ENrd6fhQ',

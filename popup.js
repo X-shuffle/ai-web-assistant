@@ -40,8 +40,27 @@ async function saveConfig() {
 }
 
 // 初始化事件监听
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     loadConfig();
+    
+    // 获取当前标签页的选中文本
+    const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
+    if (tab) {
+        try {
+            await chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                files: ['content.js']
+            });
+            
+            const pageContent = await chrome.tabs.sendMessage(tab.id, {action: 'getPageContent'});
+            if (pageContent && pageContent.content) {
+                // 自动触发总结
+                document.getElementById('summarize').click();
+            }
+        } catch (error) {
+            console.error('Error getting selection:', error);
+        }
+    }
 
     // 监听配置变化
     document.getElementById('temperature').addEventListener('input', (e) => {
