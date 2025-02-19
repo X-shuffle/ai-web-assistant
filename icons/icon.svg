@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" version="1.1" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+    <!-- 背景圆形 -->
+    <circle cx="64" cy="64" r="60" fill="#4285f4"/>
+    <!-- AI 文字效果 -->
+    <text x="64" y="76" 
+          font-family="Arial, sans-serif" 
+          font-size="48" 
+          font-weight="bold" 
+          fill="white" 
+          text-anchor="middle">AI</text>
+    <!-- 总结符号 -->
+    <path d="M40 45h48M40 65h48M40 85h32" 
+          stroke="white" 
+          stroke-width="6" 
+          stroke-linecap="round"/>
+</svg> 
